@@ -1,0 +1,12 @@
+browser->server: HTTP POST https://fullstack-exampleapp.herokuapp.com/new_note_spa
+note over browser:
+New note is sent
+as JSON data (this is specified
+in the  Content-Type)
+end note
+server-->browser: HTTP 201 (Created)
+
+note over browser:
+No redirection
+No further requests
+end note
