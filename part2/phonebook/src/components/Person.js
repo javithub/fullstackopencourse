@@ -1,10 +1,10 @@
 import React from 'react'
 
-const Person = ({name, phone }) => {
+const Person = ({name, number}) => {
 
     return (
         <>
-            {name} {phone} <br/>
+            {name} {number} <br/>
          </>
     )
   }
