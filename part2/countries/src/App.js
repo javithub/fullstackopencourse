@@ -1,26 +1,47 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useEffect } from 'react'
+import axios from 'axios'
+import Countries from './components/Countries'
 
-function App() {
+const App = () => {
+  const [countries, setCountries] = useState([])
+  const [searchName, setSearchName] = useState('')
+  const [countriesFiltered, setCountriesFiltered] = useState([]) 
+
+  useEffect(() => {
+    axios
+      .get('https://restcountries.eu/rest/v2/all')
+      .then(response => {
+        setCountries(response.data)
+      })
+  }, [])
+
+  const handleSearchChange = (event) => setSearchName(event.target.value)
+
+  const searchByName = (event) => {
+    event.preventDefault()
+    const arrayFiltered = countries.filter(element => 
+      element.name.toLowerCase().includes(searchName.toLowerCase()
+      )
+    );
+    if (arrayFiltered === undefined) setCountriesFiltered([])
+    else {
+      setCountriesFiltered([].concat(arrayFiltered))
+    }
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <form onSubmit={searchByName}>
+          <div>find countries <input value={searchName} onChange={handleSearchChange}/></div>
+          {/*<div><button type="submit">search</button></div> */ }
+      </form>
+    {(countriesFiltered.length < 10)?
+        <Countries countries={countriesFiltered} />
+      :
+       "Too many matches, specify another filter"
+     }
     </div>
-  );
+  )
 }
 
-export default App;
+export default App
