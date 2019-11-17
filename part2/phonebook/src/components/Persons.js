@@ -2,9 +2,9 @@ import React from 'react'
 import Person from './Person'
 
 
-const Persons = ({persons}) => {
+const Persons = ({persons, deletePerson}) => {
 
-const displayPersons = () => persons.map(person => <Person key={person.id} name={person.name} number={person.number} />)
+const displayPersons = () => persons.map(person => <Person key={person.id} name={person.name} number={person.number} deletePerson={() => deletePerson(person.id)} />)
 
     return (
         <div>
@@ -14,6 +14,3 @@ const displayPersons = () => persons.map(person => <Person key={person.id} name=
   }
 
 export default Persons;
-
-
-

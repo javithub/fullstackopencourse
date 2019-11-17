@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import personService from '../services/personService'
 
 const PersonForm = ({ persons, setPersons }) => {
   const [ newName, setNewName ] = useState('')
@@ -7,24 +8,44 @@ const PersonForm = ({ persons, setPersons }) => {
   const addNamePhone = (event) => {
     event.preventDefault()
 
-    const repeatedEntry = persons.find(element => element.name === newName);
+    const personFound = persons.filter(n => n.name === newName)
+    if (personFound.length === 0) {
 
-    if (repeatedEntry === undefined) {
-      const phonebookEntryObject = {
-        name: newName,
-        phone: newPhone,
-        id: persons.length + 1,
+        const phonebookEntryObject = {
+          name: newName,
+          number: newPhone,
+          id: persons.length + 1,
+        }
+      
+        personService
+        .create(phonebookEntryObject)
+        .then(returnedPhonebookEntry => {
+          setPersons(persons.concat(returnedPhonebookEntry))
+          setNewName('')
+          setNewPhone('') 
+        })
+    } else {
+      const result = window.confirm(`'${personFound[0].name}' is already added to the phonebook. Replace the old number with a new one?`);
+        if (result) {
+        const phonebookEntryObject = {
+          name: newName,
+          number: newPhone,
+          id: personFound[0].id,
+        }
+      
+        personService
+        .update(personFound[0].id, phonebookEntryObject)
+        .then(returnedPhonebookEntry => {
+          setPersons(persons.map(person => person.id !== personFound[0].id ? person : returnedPhonebookEntry))
+          setNewName('')
+          setNewPhone('') 
+        })
       }
-    
-      setPersons(persons.concat(phonebookEntryObject))
-      setNewName('')
-      setNewPhone('')      
     }
-    else {
-      alert(`${newName} is already added to phonebook`)
-    }
+
   }
 
+  
   const handleNameChange   = (event) => setNewName(event.target.value)
   const handlePhoneChange  = (event) => setNewPhone(event.target.value)
 
