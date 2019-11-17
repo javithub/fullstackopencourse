@@ -2,10 +2,14 @@ import React, { useState, useEffect } from 'react'
 import Filter from './components/Filter'
 import Persons from './components/Persons'
 import PersonForm from './components/PersonForm'
+import SuccessMessage from './components/SuccessMessage'
 import personService from './services/personService'
+import ErrorMessage from './components/ErrorMessage'
 
 const App = () => {
-  const [ persons, setPersons] = useState([]) 
+  const [ persons, setPersons] = useState([])
+  const [successMessage, setSuccessMessage] = useState(null) 
+  const [errorMessage, setErrorMessage] = useState(null) 
 
   useEffect(() => {
     personService
@@ -15,11 +19,9 @@ const App = () => {
     })
   }, [])
 
-  const deletePerson = id => {
+  const deletePerson = (id, name) => {
 
-    const personToBeDeleted = persons.filter(n => n.id === id)[0]
-    const result = window.confirm(`Delete '${personToBeDeleted.name}'?`);
-
+    const result = window.confirm(`Delete '${name}'?`);
     if (result) {
       personService
         .deletePerson(id)
@@ -27,9 +29,12 @@ const App = () => {
           setPersons(persons.filter(n => n.id !== id))
         })
         .catch(error => {
-          alert(
-            `the person with '${id}' was not found cand couldn't be deleted`
+          setErrorMessage(
+            `Information of '${name}' has already been removed from server`
           )
+          setTimeout(() => {
+            setErrorMessage(null)
+          }, 5000)
           setPersons(persons.filter(n => n.id !== id))
         })
       }
@@ -38,9 +43,11 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <SuccessMessage message={successMessage} />
+      <ErrorMessage message={errorMessage} />
       <Filter persons={persons} />
       <h3>Add a new</h3>
-      <PersonForm persons={persons} setPersons={setPersons} />
+      <PersonForm persons={persons} setPersons={setPersons} setSuccessMessage={setSuccessMessage} />
       <h3>Numbers</h3>
       <Persons persons={persons} deletePerson={deletePerson} />
     </div>

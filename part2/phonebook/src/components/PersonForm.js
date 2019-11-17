@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import personService from '../services/personService'
 
-const PersonForm = ({ persons, setPersons }) => {
+const PersonForm = ({ persons, setPersons, setSuccessMessage }) => {
   const [ newName, setNewName ] = useState('')
   const [ newPhone, setNewPhone ] = useState('')
 
@@ -42,7 +42,10 @@ const PersonForm = ({ persons, setPersons }) => {
         })
       }
     }
-
+    setSuccessMessage(`Added '${newName}'`)
+    setTimeout(() => {
+      setSuccessMessage(null)
+    }, 5000)
   }
 
   
