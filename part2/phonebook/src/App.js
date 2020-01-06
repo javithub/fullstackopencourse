@@ -47,7 +47,7 @@ const App = () => {
       <ErrorMessage message={errorMessage} />
       <Filter persons={persons} />
       <h3>Add a new</h3>
-      <PersonForm persons={persons} setPersons={setPersons} setSuccessMessage={setSuccessMessage} />
+      <PersonForm persons={persons} setPersons={setPersons} setSuccessMessage={setSuccessMessage} setErrorMessage={setErrorMessage} />
       <h3>Numbers</h3>
       <Persons persons={persons} deletePerson={deletePerson} />
     </div>
