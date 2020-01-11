@@ -2,7 +2,7 @@ post http://localhost:3001/api/blogs
 Content-Type: application/json
 
 {
-  "title": "Blog de baloncesto2",
+  "title": "Blog de baloncesto3",
   "author": "Chicho Sibilio",
   "url": "sibilio.blogspot.com",
   "likes": 2
